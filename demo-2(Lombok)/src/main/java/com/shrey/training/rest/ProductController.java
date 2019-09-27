@@ -3,6 +3,9 @@ package com.shrey.training.rest;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,8 +62,14 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<Product> getAll(@RequestParam("page") int page,@RequestParam("pageSize") int size) {
+	public List<Product> getAll(@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "pageSize", defaultValue = "10") @Min(0) @Max(20) int size) {
 		Page<Product> findAll = repo.findAll(PageRequest.of(page, size));
 		return findAll.getContent();
+	}
+
+	@RequestMapping(value="/byName/{name}",method = RequestMethod.GET)
+	public List<Product> getProductByName(@PathVariable("name") String name) {
+		return repo.findByName(name);
 	}
 }

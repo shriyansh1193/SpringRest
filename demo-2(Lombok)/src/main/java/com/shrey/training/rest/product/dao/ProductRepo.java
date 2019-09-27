@@ -10,4 +10,8 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 
 	public List<Product> findAll();
 
+	public List<Product> findByName(String name);
+
+	public List<Product> findByNameAndPriceBetween(String name, double min, double max);
+
 }
